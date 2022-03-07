@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
+	<title>Inicio</title>
+	<link rel="stylesheet" th:href="@{/css/estilo.css}">
+	<script th:src="@{/js/jquery-3.5.0.js}"></script>
+	<script th:src="@{/js/ajax.js}"></script>
+
+	<style>
+		.badge {
+			font-size: 1em;
+		}
+		
+	#datos {width:  500px;
+	margin-right: auto;
+	margin-left: auto;
+	}
+	</style>
+	<link th:href="@{/css/signin.css}" rel="stylesheet">
+
+
+	<script>
+
+		function editarTarea() {
+			$("#modal").show();
+		}
+		
+		function cerrarModal(){
+			$("#modal").hide();
+		}
+		
+	</script>
+
+</head>
+
+<body>
+
+	<nav th:replace="fragments/navbar"></nav>
+	<!-- TOKEN CSRF PARA USAR EN FETCH -->
+	<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+	<div id="wrapper" class="text-center">
+
+<div id="datos" th:each="tarea: ${tareas}">
+		<fieldset>
+			<legend>Tarea: <p th:text="${tarea.titulo}"></legend>
+
+				<p><strong>Descripción</strong>.</p>
+				<p th:text="${tarea.descripcion}">Texto que compoine la descripción</p>
+				
+				<p><strong>Prioridad</strong></p>
+				<p th:text="${tarea.prioridad}">Prioridad de la tarea</p>
+				<p><strong>Empleado</strong></p>
+				<p th:text="${tarea.tareaUsuario.nombreUsuario}"></p>
+				<p><strong>Estado</strong></p>
+				<p th:text="${tarea.estado}"></p>
+						
+
+
+			
+			<center> <button onclick="editarTarea()" class="btn btn-lg btn-primary btn-block">Editar Tarea
+			
+			</button> </center>
+
+		</fieldset>
+		
+		</div>
+	</div >
+
+	<div id="modal" class="modal">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Editar Tarea</h5>
+					<button type="button" onclick="cerrarModal()" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true"></span>
+					</button>
+				</div>
+				<div class="modal-body" th:each="tarea: ${tareas}">
+					<form th:action="@{/tarea/modificar/{id}(id=${tarea.idTarea})}" th:method="POST" class="form-signin">
+
+						<fieldset>
+
+							<div class="form-group">
+								<label for="inputNombre">Identificador de la tarea</label> <input type="text"
+									class="form-control" id="inputId" disabled>
+							</div>
+
+
+							<div class="form-group">
+								<label for="inputNombre">Nombre de la tarea</label> <input type="text"
+									class="form-control" name="titulo" id="inputNombre" aria-describedby="emailHelp"
+									placeholder="Crear test de unidad..">
+								<small id="inputNombre" class="form-text text-muted">Se
+									claro con el nombre</small>
+							</div>
+					<div class="form-group">
+							<label for="inputDescripcion">Descripcion de la tarea</label> <input
+								type="text" class="form-control" id="descripcion"
+								name="descripcion" placeholder="Descripcion de la tarea">
+							<small id="inputDescripciones" class="form-text text-muted">Da
+								una descripcion clara</small>
+						</div>
+							<div class="form-group">
+							<label for="inputPrioridad">Prioridad</label> <select
+								class="form-select" id="prioridad" name="prioridad">
+								<option value="BAJA">Baja</option>
+								<option value="MEDIA">Media</option>
+								<option value="ALTA">Alta</option>
+							</select>
+						</div>
+
+
+
+							<div class="form-group">
+								<label for="inputTrabajadores">Empleados</label> <select multiple="" class="form-select"
+									id="inputTrabajadores" name="inputTrabajadores">
+									<option value="1">Luis</option>
+									<option value="2">Erik</option>
+									<option value="3">Sergio</option>
+									<option value="4">Alejandro</option>
+									<option value="5">Salma</option>
+									<option value="6">Jessica</option>
+									<option value="7">Moha</option>
+									<option value="8">David</option>
+									<option value="9">Christohper</option>
+								</select>
+							</div>
+							<br>
+							<center> <button type="submit" class="btn btn-lg btn-primary btn-block">Modificar
+									Tarea
+								</button> </center>
+
+						</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+
+</html>
